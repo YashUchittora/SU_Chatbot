@@ -1,158 +1,142 @@
-SU - Chatbot
+# SU - Chatbot
 
-Introduction
+## Introduction
 
-Welcome to SU - Chatbot, a project designed to help students and users learn more about Sitare University effortlessly. The chatbot provides instant answers to queries related to the university, making information easily accessible to everyone, especially students from underprivileged backgrounds who might lack the necessary resources to explore educational opportunities.
+We’re excited to introduce our new project, the **"SU - Chatbot"**!
 
-Since Sitare University started in 2022, some information is still being gathered, and the chatbot will continue to improve as more data becomes available.
+This chatbot is designed to help anyone who wants to learn more about Sitare University. Whether you have questions or need information, SU-Chatbot is here to make it easy for you. We can’t wait for you to try it out!
 
-Features
+### Purpose
+The idea behind the **SU-Chatbot** is to assist people with their queries about Sitare University. Many students, especially those from underprivileged backgrounds, miss out on opportunities due to a lack of information. This chatbot aims to bridge that gap by providing easy access to university-related information.
 
-User Authentication: Login/signup functionality to track user interactions.
+> **Note:** Since Sitare University started in 2022, some details are still evolving, and the chatbot will improve as more data becomes available.
 
-Admin Access: Password-protected admin dashboard for query analysis.
+---
 
-Interactive Chat Interface: Users can ask questions and receive real-time responses.
+## Methodology
 
-Query History: Displays past questions asked in the session.
+### Python Libraries Used
 
-Feedback Mechanism: Users can rate responses and provide feedback.
+| Library              | Purpose  |
+|----------------------|----------|
+| **Flask**           | Backend framework for handling user requests, routing, and rendering templates. |
+| **Psycopg2**        | Manages storing and retrieving data (embeddings, questions, answers) from a PostgreSQL database. |
+| **SentenceTransformers** | Generates vector embeddings from text for clustering and similarity matching. |
+| **NumPy**           | Performs numerical computations, including clustering and similarity calculations. |
+| **SkLearn.cluster** | Used for clustering data. |
+| **Pandas**         | Reads and analyzes data. |
+| **Groq**            | API client for interacting with the LLaMA model, generating advanced natural language responses. |
+| **Time**            | Implements user query limits, such as restricting attempts per account within a specified timeframe. |
+| **Matplotlib**      | Visualizes graphs to show clusters based on user queries. |
+| **Seaborn**         | Enhances graphs with better color schemes and professional visualization (built on Matplotlib). |
 
-Cluster-Based Query Analysis: Assigns queries to clusters based on similarity.
+### Frontend Technologies
 
-Admin Dashboard: Visualizes user interests using graphs.
+| Technology          | Purpose  |
+|---------------------|----------|
+| **HTML**           | Creates the structure and layout of the chatbot interface. |
+| **CSS**            | Styles the chatbot for better visual appeal. |
+| **JavaScript (JS)** | Used for interactive elements, such as password protection and star ratings. |
 
-Efficient Query Processing: Uses vector embeddings for accurate response retrieval.
+---
 
-LLAMA Integration: Enhances responses using the LLaMA model.
+## Implementation Details
 
-Query Limit: Users can make up to 10 queries per hour.
+### **Frontend**
 
-Data Visualization: Displays query trends and areas for improvement.
+#### `Login_page.html`:
+- Collects user data (ID and name) during login or signup.
+- Includes a password-protected Admin button redirecting to `User_data.html` to display query-based graphs.
 
-Technology Stack
+#### `Index.html`:
+- Chat interface where users can ask questions.
+- Displays query history and collects optional feedback on chatbot responses.
 
-Backend
+#### `User_data.html` (Admin Dashboard):
+- Displays graphs of user query clusters, highlighting areas of interest or improvement.
 
-Flask: Handles API requests and routing.
+### **Backend**
 
-Psycopg2: Connects to PostgreSQL database.
+#### `pgvector_embedding.py`:
+- Processes CSV files to generate vector embeddings and clusters.
+- Stores embeddings and cluster data in the database for efficient similarity searches.
 
-SentenceTransformers: Generates vector embeddings for queries.
+#### `subot.py`:
+- Main file integrating all functionalities.
+- Processes user queries by converting them into embeddings, finding similar clusters, and retrieving relevant answers.
+- Sends responses to LLAMA for summarization before displaying to users.
+- Implements query limits (10 queries/hour per user).
 
-NumPy: Performs numerical computations.
+### **Database Tables**
 
-SkLearn.cluster: Clustering of embeddings.
+| Table Name         | Purpose  |
+|--------------------|----------|
+| **qa_embeddings**  | Stores clusters, questions, answers, and embeddings for similarity-based searches. |
+| **user_data**      | Tracks user queries and assigned clusters. |
+| **Feedback**       | Records user feedback and star ratings. Responses with < 3 stars are flagged as false (`F`) and others as true (`T`) for database improvement using Naive Bayes classification. |
 
-Pandas: Data processing and analysis.
+---
 
-Groq API: Communicates with LLAMA model for enhanced responses.
+## Features
 
-Matplotlib & Seaborn: Visualizes query distribution and trends.
+- **User Authentication:** 
+  - Login/signup to collect and store user ID and name.
+  - Password-protected Admin access to manage user data and view query analysis.
 
-Frontend
+- **Interactive Chat Interface:** 
+  - Users can ask questions and receive real-time responses.
+  - Displays query history for the session.
 
-HTML: Structures chatbot interface.
+- **Feedback Mechanism:** 
+  - Users can like/dislike responses or provide feedback on suggested clusters.
 
-CSS: Enhances UI design.
+- **Cluster-Based Query Analysis:** 
+  - Each user query is assigned to a cluster based on vector similarity.
+  - Helps identify user interests and areas for improvement.
 
-JavaScript (JS): Handles interactivity (e.g., password toggle, star rating).
+- **Admin Dashboard:** 
+  - Dedicated page for admins to view graphical representations of user queries.
+  - Shows which clusters receive the most queries.
 
-Project Structure
+- **Efficient Query Processing:** 
+  - Queries are converted into vector embeddings and matched with the nearest cluster.
 
-├── backend
-│   ├── subot.py               # Main chatbot backend logic
-│   ├── pgvector_embedding.py  # Handles vector embeddings
-│   └── database.sql           # Database schema
-│
-├── frontend
-│   ├── templates
-│   │   ├── login_page.html    # User authentication page
-│   │   ├── index.html         # Chat interface
-│   │   ├── user_data.html     # Admin dashboard
-│   ├── static
-│   │   ├── styles.css         # Stylesheets
-│   │   ├── script.js          # JavaScript functions
-│
-├── database
-│   ├── qa_embeddings.sql      # Stores Q&A embeddings
-│   ├── user_data.sql          # Tracks user queries
-│   ├── feedback.sql           # Stores feedback
-│
-├── README.md                  # Project documentation
-└── requirements.txt            # Dependencies
+- **LLAMA Integration:** 
+  - Summarizes and refines chatbot responses using LLAMA (via Groq API).
 
-Database Tables
+- **User Query Limit:** 
+  - Limits each user to **10 queries per hour**.
 
-qa_embeddings: Stores clusters, questions, answers, and embeddings.
+- **Data Visualization:** 
+  - Graphs show the distribution of user queries across clusters to help improve chatbot knowledge.
 
-user_data: Tracks user queries and clusters.
+---
 
-feedback: Stores feedback and ratings, marking low-rated responses for improvement.
+## Results
+- Graphs help identify user interest areas for improvement.
+- User feedback helps refine chatbot responses.
 
-Installation & Setup
+---
 
-Prerequisites
 
-Python 3.x
+## Challenges Faced
 
-PostgreSQL
+1. **Setting up Vector Extension in PostgreSQL** – Installed and configured `Pgvector` for efficient similarity searches.
+2. **Handling Embedding Iterations** – Ensured accurate similarity matching.
+3. **Integrating LLAMA API** – Faced API issues while implementing and fine-tuning.
+4. **Implementing Limited User Attempts** – Required multiple trials to limit queries.
+5. **Displaying Continuous Chat History** – Maintaining real-time chat history.
+6. **Storing and Using User Data** – Mapping user queries to clusters and using feedback effectively.
+7. **Debugging and Error Handling** – Fixed issues across frontend, backend, and database.
 
-Node.js (for frontend interactivity)
+---
 
-Setup Instructions
+## Conclusion
+This project demonstrates how **SU-Chatbot** can assist in answering queries related to Sitare University. By leveraging **LLaMA API** and structured data, it provides meaningful and helpful responses.
 
-Clone the repository:
+With continuous data collection and enhancements, **SU-Chatbot** will improve over time. Future updates may include additional ML algorithms and expanded datasets to refine its performance.
 
-git clone <repo-link>
-cd su-chatbot
+---
 
-Install dependencies:
-
-pip install -r requirements.txt
-
-Set up the PostgreSQL database:
-
-psql -U <username> -d <database_name> -f database.sql
-
-Run the Flask backend:
-
-python backend/subot.py
-
-Open index.html in a browser to access the chatbot.
-
-Challenges Faced
-
-Setting up Pgvector in PostgreSQL for vector-based similarity search.
-
-Embedding Iterations: Ensuring accurate similarity matching.
-
-LLAMA API Integration: Handling API-related issues.
-
-User Query Limit Implementation: Restricting queries efficiently.
-
-Chat History Management: Maintaining a continuous session-based history.
-
-Feedback Handling: Collecting and categorizing responses for improvement.
-
-Future Improvements
-
-Expand database with more Sitare University-related data.
-
-Integrate additional ML algorithms for better query classification.
-
-Enhance response accuracy using advanced NLP models.
-
-Improve chatbot UI for a more interactive experience.
-
-
-License
-
-This project is open-source and available under the MIT License.
-
-GitHub Repository
-
-Click here to access the repository
-
-Thank you for exploring SU - Chatbot!
+Thank you!!
 
